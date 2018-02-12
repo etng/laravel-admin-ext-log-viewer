@@ -9,9 +9,10 @@ use Illuminate\Routing\Controller;
 
 class LogController extends Controller
 {
-    public function index($file, Request $request)
+    public function index($file = null, Request $request)
     {
         return Admin::content(function (Content $content) use ($file, $request) {
+
             $offset = $request->get('offset');
 
             $viewer = new LogViewer($file);
@@ -25,10 +26,11 @@ class LogController extends Controller
                 'prevUrl'   => $viewer->getPrevPageUrl(),
                 'nextUrl'   => $viewer->getNextPageUrl(),
                 'filePath'  => $viewer->getFilePath(),
-                'size'      => static::bytesToHuman($viewer->getFilesize()),
+                'size'      => static::bytesToHuman($viewer->getFilesize())
             ]));
 
             $content->header($viewer->getFilePath());
+
         });
     }
 
@@ -51,6 +53,6 @@ class LogController extends Controller
             $bytes /= 1024;
         }
 
-        return round($bytes, 2).' '.$units[$i];
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 }
